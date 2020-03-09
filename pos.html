@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="EUC-KR">
+    <title>Insert title here</title>
+    <style>
+        /* Global CSS */
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        a {
+            text-decoration: none;
+        }
+        html,body{
+            min-width: 800px;
+        }
+        ul, li{
+            text-decoration: none;
+            list-style: none;
+        }
+        /* width */
+        ::-webkit-scrollbar {
+            width: 5px;
+        }
+        /* Track */
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1;
+        }
+        /* Handle */
+        ::-webkit-scrollbar-thumb {
+            background: #888;
+        }
+        /* POS CSS */
+        header {
+            position: fixed;
+            width: 100%;
+            height: 5%;
+            min-height: 30px;
+            background: #EB9486;
+        }
+        section {
+            display: block;
+            position: absolute;
+            top: 5%;
+            margin: 1% 28% 0 1%;
+            border: 3px solid #0F7173;
+            width: 68%;
+            height: 85%;
+            overflow: auto;
+        }
+        aside {
+            position: absolute;
+            display: block;
+            top: 5%;
+            right: 0px;
+            margin: 1% 1% 0 0;
+            background: #f1f1f1;
+            border: 3px solid #0F7173;
+            width: 28%;
+            min-width: 270px;
+            height: 85%;
+        }
+        footer {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 5%;
+            min-height: 30px;
+            background: #EB9486;
+        }
+        div.menu {
+            float: left;
+            padding: 0 10px;
+            width:122px;
+            height:200px;
+        }
+        img{
+            max-width: 122px;
+            max-height: 145px;
+            height: auto;
+        }
+        ul.cart{
+            display:block;
+            width: 100%;
+            margin: 0 auto;
+            height: 50%;
+            overflow: auto;
+        }
+        li.cart-header{
+            font-weight: bold;
+        }
+        li {
+            position:relative;
+            width: 95%;
+            height: 50px;
+            padding: 5px;
+        }
+        .cart > li:hover{
+            background:bisque;
+        }
+        li > div{
+            float: right;
+            width: 20%;
+            min-width: 50px;
+            text-align: right;
+        }
+        li > div.name{
+            float: left;
+            width: 58%;
+            min-width: 100px;
+            text-align: left;
+        }
+        .result{
+            position: relative;
+            width: 90%;
+            margin: 0 auto;
+        //border: 2px solid red;
+        }
+        .result h3{
+            display: inline-block;
+            text-align: right;
+            width:70px;
+            letter-spacing: 3px;
+        }
+        .result #unit{
+            position: absolute;
+            right: 0;
+            width: 30px;
+        }
+        .result h3.total,h3.input-price,h3#balance{
+            position: absolute;
+            right: 20px;
+        }
+        .decision {
+            position: relative;
+            bottom:0;
+            //border: 2px solid;
+            height: 180px;
+        }
+        input[type=number]{
+            position: absolute;
+            right:30px;
+            width: 60%;
+            text-align: right;
+            font-size: medium;
+        }
+        .status{
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            top: 10px;
+            width: 200px;
+            color: crimson;
+            text-align: center;
+            font-size: medium;
+        }
+        .cancel{
+            position:absolute;
+            left: 5px;
+            bottom: 5px;
+            background: crimson;
+            width: 25%;
+            min-width: 80px;
+            height: 50px;
+            border-radius: 10px;
+            text-align: center;
+            vertical-align: middle;
+            color: whitesmoke;
+        }
+        .cancel:hover{
+            width:30%;
+            min-width: 100px;
+            height: 60px;
+        }
+        .payment{
+            position:absolute;
+            right: 5px;
+            bottom: 5px;
+            background: lightgreen;
+            width: 40%;
+            min-width: 150px;
+            height: 50px;
+            border-radius: 10px;
+            text-align: center;
+            vertical-align: middle;
+            color: whitesmoke;
+        }
+    </style>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        var burger = [
+            {id:1, name:'트러플콰트로머쉬룸 스테이크버거', price:7000, left: 30, url:"http://www.burgerking.co.kr/Content/menu/image/slide/2170913_SL_PC_thumnail_01_Si.jpg"},
+            {id:2, name:'트러플콰트로머쉬룸 와퍼', price:6000, left: 30, url:"http://www.burgerking.co.kr/Content/menu/image/slide/21170913_SL_PC_thumnail_01__Si.jpg"},
+            {id:3, name:'통새우와퍼주니어', price:4600, left: 30, url:"http://www.burgerking.co.kr/Content/menu/image/slide/170525_TSWJ_DAN_PC_thumbnail.jpg"},
+            {id:4, name:'통새우스테이크버거', price:7700, left: 30, url:"http://www.burgerking.co.kr/Content/menu/image/slide/%ED%86%B5%EC%83%88%EC%9A%B0%EC%8A%A4%ED%85%8C%EC%9D%B4%ED%81%AC%EB%B2%84%EA%B1%B0_PC_thumbnail.jpg"},
+            {id:5, name:'통새우와퍼', price:6600, left:20, url:"http://www.burgerking.co.kr/Content/menu/image/slide/%ED%86%B5%EC%83%88%EC%9A%B0%EC%99%80%ED%8D%BC_PC_thumbnail.jpg"},
+            {id:6, name:'와퍼', price:5700, left:50, url:"http://www.burgerking.co.kr/Content/menu/image/slide/burger_whopper_thum.jpg"},
+            {id:7, name:'불고기와퍼', price:5700, left:50, url:"http://www.burgerking.co.kr/Content/menu/image/slide/sburger_bolgogiwhopper.jpg"},
+            {id:8, name:'콰트로치즈와퍼', price:6500, left:40, url:"http://www.burgerking.co.kr/Content/menu/image/slide/151111_BurgerKing_site_menu_%EC%BD%B0%ED%8A%B8%EB%A1%9C%EC%B9%98%EC%A6%88%EC%99%80%ED%8D%BC_PC_thumbnail.jpg"},
+            {id:9, name:'치즈와퍼', price:6300, left:25, url:"http://www.burgerking.co.kr/Content/menu/image/slide/burger_cheesewhopper_thum.jpg"},
+            {id:10, name:'와퍼주니어', price:4000, left:25, url:"http://www.burgerking.co.kr/Content/menu/image/slide/burger_whopperjr_thum.jpg"},
+            {id:11, name:'불고기와퍼주니어', price:4000, left:40, url:"http://www.burgerking.co.kr/Content/menu/image/slide/sburger_bulgogiwhopperjr.jpg"},
+            {id:12, name:'콰트로치즈와퍼주니어', price:4600, left:50, url:"http://www.burgerking.co.kr/Content/menu/image/slide/sburger_quattrocheesewhopperjr.jpg"},
+            {id:13, name:'치즈와퍼주니어', price:4300, left:15, url:"http://www.burgerking.co.kr/Content/menu/image/slide/burger_cheesewhopperjr_thum.jpg"},
+            {id:14, name:'BLT뉴올리언스 치킨버거', price:5800, left:20, url:"http://www.burgerking.co.kr/Content/menu/image/slide/170901_SL_PC_thumnail_01New.jpg"},
+            {id:15, name:'뉴올리언스 치킨버거', price:4600, left:30, url:"http://www.burgerking.co.kr/Content/menu/image/slide/170705_SL_PC_thumnail_12.jpg"},
+            {id:16, name:'2000 치킨버거', price:2000, left:30, url:"http://www.burgerking.co.kr/Content/menu/image/slide/170705_CKB_PC_thumnail.jpg"},
+            {id:17, name:'BLT롱치킨버거', price:4900, left:15, url:"http://www.burgerking.co.kr/Content/menu/image/slide/170525_LCB_PC_thumbnail.jpg"},
+            {id:18, name:'오리지널롱치킨버거', price:4400, left:20, url:"http://www.burgerking.co.kr/Content/menu/image/slide/originallongchickenburger_thum.jpg"},
+            {id:19, name:'치즈버거', price:3000, left:10, url:"http://www.burgerking.co.kr/Content/menu/image/slide/burger_cheeseburger_thum.jpg"},
+            {id:20, name:'불고기버거', price:3000, left:10, url:"http://www.burgerking.co.kr/Content/menu/image/slide/sburger_bulgogi.jpg" }
+        ];
+        var burgerInit = JSON.parse(JSON.stringify(burger));
+        var total = 0;
+        var input_price=0;
+        var balance = 0;
+        $(document).ready(function(){
+            var str = '';
+            $(burger).each(function(index, item){
+                str += '<div class="menu">';
+                str += '<img src='+item.url+' alt=\"'+item.name+'\">';
+                str += '<span> 가격: '+item.price+' 원</span><br>';
+                str += '<span class="left"> 재고: '+item.left+' 개</span>';
+                str += '</div>';
+            });
+            $('section').html(str);
+            $('div.menu').on({
+                click:function(){
+ 
+                    var index   = $('div.menu').index(this);
+                    var item    = burger[index];
+                    var left    = $('.left');
+                    var cart    = $('.cart');
+                    var inCart  = $('.cart').children('#'+item.id);
+                    if(item.left==0){
+                        $('div.status').html('재고가 부족합니다. 더 이상 담을 수 없습니다.');
+                        $('div.status').show('slow');
+                        return;
+                    }
+                    --item.left;
+                    if($(inCart).length != 0){
+                        console.log('cart not null');
+                        $(inCart).html('<div class="name">'+item.name+'</div><div>'+item.price+'</div><div>'+(burgerInit[index].left-item.left)+'</div>');
+                        $(left[index]).html('재고: '+ item.left + ' 개');
+                        total += item.price;
+                    } else{
+                        console.log('cart null');
+                        var str = '<li id=\"'+item.id+'\"><div class="name">'+item.name+'</div><div>'+item.price+'</div><div>'+(burgerInit[index].left-item.left)+'</div></li>';
+                        $(cart).append(str);
+                        $(left[index]).html('재고: '+ item.left+' 개');
+                        total += item.price;
+                    }
+                    $('.total').html('<span>'+total+'</span>');
+                    console.log(input_price);
+                    console.log(total);
+                    if(total>input_price) {
+                        console.log("!!");
+                        $('div.status').html('금액이 부족합니다');
+                        $('div.status').show("slow");
+                    } else{
+                        $('div.status').hide("slow");
+                        balance = input_price-total;
+                        $('#balance').html(balance);
+                    }
+                    //console.log($(cart).html());
+                },
+                hover:function(){
+ 
+                }
+ 
+            });
+            console.log(input_price);
+            $('#input-price').keyup(function () {
+                input_price = parseInt($(this).val());
+                if(total>input_price) {
+                    $('div.status').html('금액이 부족합니다');
+                    $('div.status').show("slow");
+                } else{
+                    $('div.status').hide("slow");
+                    balance = input_price-total;
+                    $('#balance').html(balance);
+                }
+            })
+            $('div.cancel').on({
+                click:function(){
+                    total=0;
+                    $('.total').html('');
+                    $('.cart').html('');
+                    $('#balance').html('');
+                    $('div.status').hide('slow');
+                    burger = JSON.parse(JSON.stringify(burgerInit));
+                    $(burger).each(function (index, item) {
+                        $('.left').eq(index).html('재고: '+item.left+' 개');
+                    });
+                    $('div.status').css({
+                        'color': 'red',
+                        'font-size': 'medium'
+                    });
+                }
+            });
+ 
+            $('div.payment').on({
+                click:function(){
+                    if(balance>=0 && $('.cart').length!=0){
+                        $('div.status').html('결재 완료');
+                        $('div.status').css({
+                            'color': 'green',
+                            'font-size': 'large'
+                        });
+                        $('div.status').show("slow");
+                    } else {
+                        $('div.status').html('결재 불가');
+                    }
+                }
+            });
+ 
+        });
+ 
+    </script>
+</head>
+<body>
+<!-- HEADER START -->
+<header>
+    <!-- POS name, world time -->
+    <h2 style="color:whitesmoke; padding-left: 10px">MAKI Burger</h2>
+</header>
+<!-- HEADER END -->
+<!-- SECTION START -->
+<section>
+    <!-- items -->
+ 
+</section>
+<!-- SECTION END -->
+<!-- ASIDE START -->
+<aside>
+    <!-- fixed table both cart and price -->
+    <ul>
+        <li class="cart-header">
+            <div class="name">품명</div>
+            <div>단가</div>
+            <div>수량</div>
+        </li>
+    </ul>
+    <ul class="cart"></ul>
+    <div class="result">
+        <h3>총액</h3>
+        <h3 class="total"></h3>
+        <h3 id="unit">원</h3>
+    </div>
+    <div class="result">
+        <h3>보유액</h3>
+        <input type="number" id="input-price" placeholder="금액을 입력하세요">
+        <h3 id="unit">원</h3>
+    </div>
+    <div class="result">
+        <h3>잔액</h3>
+        <h3 id="balance"></h3>
+        <h3 id="unit">원</h3>
+    </div>
+    <div class="decision">
+        <div class="status"></div>
+        <div class="cancel">취소</div>
+        <div class="payment">결재</div>
+    </div>
+</aside>
+<!-- ASIDE END -->
+<!-- FOOTER START -->
+<footer>
+    <!-- menu table -->
+</footer>
+<!-- FOOTER END -->
+</body>
+</html>
