@@ -15,4 +15,4 @@ JavaScript대신 Jquery를 사용하여 햄버거가게 Pos시스템을 구현�
 - 형상관리 : git, github
 
 ## 구현 화면
-![](images/jquery_bugger.png)
+![](images/jquery_burger.png)
